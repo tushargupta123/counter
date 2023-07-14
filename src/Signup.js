@@ -15,7 +15,11 @@ const Signup = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if(confirm===password){
+        if (password.length() < 6){
+          alert("Length of password must be greater than 6 characters")
+        }else if(confirm!==password){
+          alert("Confirm Password does not match")
+        }else{
           auth.createUserWithEmailAndPassword(email, password).then(u => {
             dispatch(tokenSlice(u.user.uid));
             if(u.user.uid){
@@ -24,8 +28,6 @@ const Signup = () => {
           }).catch(err => {
               alert("email already in use")
           })
-        }else{
-          alert("Confirm Password does not match")
         }
     }
 

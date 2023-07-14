@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import Counter from "../src/features/counter/Counter";
+import { auth } from "./config/fire";
+import { signOutSlice } from "./features/Auth/authSlice";
 
 const Home = () => {
   const counters = useSelector((state) => state.counterReducer.counters);
@@ -18,9 +20,16 @@ const Home = () => {
       },
     });
   };
+
   const removeCounter = (id) => {
     dispatch({ type: "REMOVE_COUNTER", payload: id });
   };
+
+  const handleLogout = () => {
+    auth.signOut();
+    dispatch(signOutSlice(""));
+  };
+
   return (
     <div className="app-container">
       <div className="input-container">
@@ -34,6 +43,7 @@ const Home = () => {
         <button onClick={addCounter} className="btn-home">
           Add Counter
         </button>
+        <button onClick={handleLogout} className="btn-logout">Logout</button>
       </div>
       <div className="counters-container">
         {counters.map((counter) => (

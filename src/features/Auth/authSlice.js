@@ -11,6 +11,12 @@ export const tokenSlice = createAsyncThunk(
     return data;
   }
 );
+export const signOutSlice = createAsyncThunk(
+  'user/signOutSlice',
+  async (data) => {
+    return data;
+  }
+);
 
 export const userSlice = createSlice({
   name: 'user',
@@ -23,7 +29,14 @@ export const userSlice = createSlice({
       .addCase(tokenSlice.fulfilled, (state, action) => {
         state.status = 'idle';
         state.token = action.payload;
-      });
+      })
+      .addCase(signOutSlice.pending, (state) => {
+        state.status = 'loading';
+      })
+      .addCase(signOutSlice.fulfilled, (state, action) => {
+        state.status = 'idle';
+        state.token = action.payload;
+      })
     }
 });
 
