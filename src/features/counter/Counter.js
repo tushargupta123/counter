@@ -1,67 +1,76 @@
-import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import {
-  decrement,
-  increment,
-  incrementByAmount,
-  incrementAsync,
-  incrementIfOdd,
-  selectCount,
-} from './counterSlice';
-import styles from './Counter.module.css';
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import "./Counter.css";
 
-export function Counter() {
-  const count = useSelector(selectCount);
+const Counter = ({ counter }) => {
   const dispatch = useDispatch();
-  const [incrementAmount, setIncrementAmount] = useState('2');
+  const [startValue, setStartValue] = useState(counter.startValue);
 
-  const incrementValue = Number(incrementAmount) || 0;
+  const incrementCounter = () => {
+    dispatch({ type: "INCREMENT_COUNTER", payload: counter.id });
+  };
+
+  const decrementCounter = () => {
+    dispatch({ type: "DECREMENT_COUNTER", payload: counter.id });
+  };
+
+  const resetCounter = () => {
+    dispatch({ type: "RESET_COUNTER", payload: counter.id });
+  };
+
+  const removeCounter = () => {
+    dispatch({ type: "REMOVE_COUNTER", payload: counter.id });
+  };
+
+  const handleStartValueChange = (e) => {
+    setStartValue(parseInt(e.target.value, 10));
+  };
+
+  const handleUpdateStartValue = () => {
+    dispatch({
+      type: "UPDATE_START_VALUE",
+      payload: {
+        id: counter.id,
+        startValue: startValue,
+      },
+    });
+  };
 
   return (
-    <div>
-      <div className={styles.row}>
-        <button
-          className={styles.button}
-          aria-label="Decrement value"
-          onClick={() => dispatch(decrement())}
-        >
-          -
-        </button>
-        <span className={styles.value}>{count}</span>
-        <button
-          className={styles.button}
-          aria-label="Increment value"
-          onClick={() => dispatch(increment())}
-        >
-          +
+    <div className="counter-container">
+      <h3>{counter.name}</h3>
+      <p>Value: {counter.value}</p>
+      <div className="input-container">
+        <input
+          type="number"
+          value={startValue}
+          onChange={handleStartValueChange}
+          placeholder="Start Value"
+          className="counter-input"
+        />
+        <button onClick={handleUpdateStartValue} className="counter-button">
+          Update Start Value
         </button>
       </div>
-      <div className={styles.row}>
-        <input
-          className={styles.textbox}
-          aria-label="Set increment amount"
-          value={incrementAmount}
-          onChange={(e) => setIncrementAmount(e.target.value)}
-        />
-        <button
-          className={styles.button}
-          onClick={() => dispatch(incrementByAmount(incrementValue))}
-        >
-          Add Amount
+
+      <div className="button-container">
+        {" "}
+        {/* Apply the button container class */}
+        <button onClick={incrementCounter} className="counter-button">
+          Increment
         </button>
-        <button
-          className={styles.asyncButton}
-          onClick={() => dispatch(incrementAsync(incrementValue))}
-        >
-          Add Async
+        <button onClick={decrementCounter} className="counter-button">
+          Decrement
         </button>
-        <button
-          className={styles.button}
-          onClick={() => dispatch(incrementIfOdd(incrementValue))}
-        >
-          Add If Odd
+        <button onClick={resetCounter} className="counter-button">
+          Reset
+        </button>
+        <button onClick={removeCounter} className="counter-button">
+          Remove
         </button>
       </div>
     </div>
   );
-}
+};
+
+export default Counter;
